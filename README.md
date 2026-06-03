@@ -7,6 +7,7 @@
 |                |            |           |
 |                |            |           |
 |Hosea Felix Sanjaya|5025241177|C|
+|Lyonel Oliver Dwiputra|5025241145|C|
 
 ## Link Youtube (Unlisted)
 Link ditaruh di bawah ini
