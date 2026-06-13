@@ -74,7 +74,6 @@ class RoomManager:
         return None
 
     def leave(self, pid):
-        """Lepas pemain dari antrean & room (dipakai untuk lobby/leave eksplisit)."""
         if pid in self.queue:
             self.queue.remove(pid)
         room = self.room_of(pid)
@@ -92,7 +91,6 @@ class RoomManager:
             self.queue.append(pid)
 
     def try_matchmake(self):
-        """Bentuk room tersembunyi tiap kali terkumpul tepat MAX_PLAYERS pemain."""
         formed = []
         while len(self.queue) >= MAX_PLAYERS:
             group = [self.queue.pop(0) for _ in range(MAX_PLAYERS)]
