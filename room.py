@@ -1,3 +1,9 @@
+"""
+room.py
+=======
+Manajemen room, lobby, dan matchmaking (Quick Match). Tanpa Pygame.
+"""
+
 import random
 import time
 

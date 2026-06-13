@@ -1,3 +1,7 @@
+"""
+Juara 1: +100 | Juara 2: +50 | Juara 3: 0 | Juara 4: -30
+"""
+
 import sqlite3
 import threading
 
