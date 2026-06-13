@@ -4,6 +4,7 @@ import json
 import time
 import socket
 import select
+import mimetypes
 
 import http_parser as hp
 import protocol as wsp
@@ -11,6 +12,7 @@ from coordinator import GameCoordinator, log
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 INDEX_PATH = os.path.join(HERE, "web", "index.html")
+ASSETS_DIR = os.path.join(HERE, "web", "assets")
 HOST = "0.0.0.0"
 PORT = 8080
 TICK_RATE = 20
@@ -54,7 +56,8 @@ class WSServer:
         self.server_sock.bind((self.host, self.port))
         self.server_sock.listen(32)
         self.server_sock.setblocking(False)
-        log("INFO", f"Bomberman server di http://{self.host}:{self.port}")
+        log("INFO", f"Bomberman WEB server di http://{self.host}:{self.port}  "
+                    f"(buka di browser; tick {TICK_RATE}/s)")
         self.last_tick = time.time()
         try:
             while True:
@@ -77,12 +80,14 @@ class WSServer:
                     self.last_tick = now
                     self.coord.tick(now)
         except KeyboardInterrupt:
-            log("INFO", "Server dihentikan.")
+            log("INFO", "Server dihentikan (Ctrl-C).")
         finally:
             try:
                 self.server_sock.close()
             except OSError:
                 pass
+            self.coord.close()
+
 
     def _accept(self):
         try:
@@ -132,10 +137,36 @@ class WSServer:
         elif req.path in ("/", "/index.html"):
             c.outbuf.extend(hp.build_response(self.index_html))
             c.close_after = True
+        elif req.path.startswith("/assets/"):
+            self._serve_asset(c, req.path)
         else:
             c.outbuf.extend(hp.build_response(b"Not Found",
                             content_type="text/plain", status="404 Not Found"))
             c.close_after = True
+
+    def _serve_asset(self, c, path):
+        rel = path[len("/assets/"):]
+        # reject path traversal
+        if ".." in rel or rel.startswith("/") or not rel:
+            c.outbuf.extend(hp.build_response(b"Forbidden",
+                            content_type="text/plain", status="403 Forbidden"))
+            c.close_after = True
+            return
+        asset_path = os.path.join(ASSETS_DIR, rel)
+        if os.path.isfile(asset_path):
+            try:
+                with open(asset_path, "rb") as f:
+                    data = f.read()
+                ct, _ = mimetypes.guess_type(asset_path)
+                c.outbuf.extend(hp.build_response(data,
+                                content_type=ct or "application/octet-stream"))
+            except OSError:
+                c.outbuf.extend(hp.build_response(b"Error",
+                                content_type="text/plain", status="500 Internal Server Error"))
+        else:
+            c.outbuf.extend(hp.build_response(b"Not Found",
+                            content_type="text/plain", status="404 Not Found"))
+        c.close_after = True
 
     def _process_ws(self, c):
         for kind, payload in c.frames.messages():
