@@ -1,0 +1,21 @@
+{
+  "name": "g04-final-project-c-07_seporsi-makan-siang-leon",
+  "version": "1.0.0",
+  "description": "[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/90Mprfp5)\r # Network Programming - Final Project [G04]",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nafkhanzam-classrooms/g04-final-project-c-07_seporsi-makan-siang-leon.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/nafkhanzam-classrooms/g04-final-project-c-07_seporsi-makan-siang-leon/issues"
+  },
+  "homepage": "https://github.com/nafkhanzam-classrooms/g04-final-project-c-07_seporsi-makan-siang-leon#readme"
+}
